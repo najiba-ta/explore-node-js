@@ -12,19 +12,30 @@ import {
   TextArea,
   TextField,
 } from "@heroui/react";
+import { useRouter } from "next/navigation";
+
+
 
 const NewUsersPage = () => {
-    const onSubmit = (event) =>{
+    const router = useRouter()
+    const onSubmit = async(event) =>{
         event.preventDefault();
     const formData = new FormData(event.target);
     const newUsers = Object.fromEntries(formData.entries());
      console.log(newUsers);
 
-     fetch('http://localhost:8000/users', {
+      
+     const req =await fetch('http://localhost:8000/users', {
         method:'POST',
         headers:{'Content-Type' :'application/json'},
         body: JSON.stringify(newUsers)
      })
+     const res= await req.json();
+    //  console.log('created user', createdUser);
+     if(res.success){
+        alert('User created successfully!');
+        router.push('/users');
+     }
     }
     return (
         <div>
